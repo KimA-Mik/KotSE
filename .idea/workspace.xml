@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5c7e1bc7-cb44-43f2-885d-b9fda02d00fc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Parser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Parser.kt" afterDir="false" />
-    </list>
+    <list default="true" id="5c7e1bc7-cb44-43f2-885d-b9fda02d00fc" name="Changes" comment="Added docx files support with Apache POI" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -79,8 +73,25 @@
       <option name="presentableId" value="Default" />
       <updated>1678396824368</updated>
       <workItem from="1678396825469" duration="7699000" />
-      <workItem from="1678453202473" duration="1004000" />
+      <workItem from="1678453202473" duration="1544000" />
+      <workItem from="1678454766247" duration="1262000" />
+      <workItem from="1678456075938" duration="560000" />
     </task>
+    <task id="LOCAL-00001" summary="Change pdf parsing library to Apache PDFBox">
+      <created>1678454265250</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1678454265250</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Added docx files support with Apache POI">
+      <created>1678456630114</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1678456630114</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -91,11 +102,22 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Change pdf parsing library to Apache PDFBox" />
+    <MESSAGE value="Added docx files support with Apache POI" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added docx files support with Apache POI" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

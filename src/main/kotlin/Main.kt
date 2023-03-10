@@ -4,8 +4,6 @@ import java.io.File
 import java.lang.Exception
 
 fun main(args: Array<String>) {
-    println("Hello World!")
-
     if (args.isEmpty()) {
         println("Provide directory path")
     }

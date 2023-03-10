@@ -36,5 +36,4 @@ class Lexer(val src: String) : Iterator<String>{
         }
         return String()
     }
-
 }
