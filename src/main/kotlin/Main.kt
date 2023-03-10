@@ -1,4 +1,5 @@
-import Index.Parser
+import index.Parser
+import server.SimpleServer
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -50,5 +51,7 @@ private fun serve(file: String){
     File(file).bufferedReader().use {it ->
         indexData = Json.decodeFromString(it.readText())
     }
-    println(indexData)
+
+    val server = SimpleServer(indexData, 6969)
+    server.run()
 }

@@ -1,4 +1,4 @@
-package Index
+package index
 
 import IndexData
 import org.apache.pdfbox.io.RandomAccessFile
