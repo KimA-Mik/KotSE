@@ -1,3 +1,5 @@
+import Index.Parser
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -17,12 +19,13 @@ fun main(args: Array<String>) {
         val cacheFile = args[2]
         index(dir, cacheFile)
     }else if(args[0] == "serve"){
-        println("serving")
+        if (args.size == 2)
+            serve(args[1])
+        else
+            println("Provide index file")
     }else{
         usage()
     }
-
-
 }
 
 private fun usage(){
@@ -40,4 +43,12 @@ private fun index(dir: String, cacheFile: String) {
     } catch (e: Exception) {
         println(e.localizedMessage)
     }
+}
+
+private fun serve(file: String){
+    lateinit var indexData: IndexData
+    File(file).bufferedReader().use {it ->
+        indexData = Json.decodeFromString(it.readText())
+    }
+    println(indexData)
 }

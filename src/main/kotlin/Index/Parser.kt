@@ -1,3 +1,6 @@
+package Index
+
+import IndexData
 import org.apache.pdfbox.io.RandomAccessFile
 import org.apache.pdfbox.pdfparser.PDFParser
 import org.apache.pdfbox.pdmodel.PDDocument
@@ -13,7 +16,7 @@ import kotlin.collections.HashMap
 
 class Parser() {
 
-    fun ParseDir(dirPath: String) : Index {
+    fun ParseDir(dirPath: String) : IndexData {
         ZipSecureFile.setMinInflateRatio(0.0)
         val tfIndex = HashMap<String, HashMap<String, Int>>()
         File(dirPath).walk(FileWalkDirection.TOP_DOWN).forEach {
@@ -45,7 +48,7 @@ class Parser() {
             }
         }
         val idfIndex = computeIdfIndex(tfIndex)
-        return Index(tfIndex, idfIndex)
+        return IndexData(tfIndex, idfIndex)
     }
 
     private fun computeIdfIndex(data: HashMap<String, HashMap<String, Int>>): HashMap<String, Int> {

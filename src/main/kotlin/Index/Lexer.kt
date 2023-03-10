@@ -1,3 +1,5 @@
+package Index
+
 import java.util.*
 
 class Lexer(val src: String) : Iterator<String>{
