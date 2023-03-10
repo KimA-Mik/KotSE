@@ -23,7 +23,7 @@ class Lexer(val src: String) : Iterator<String>{
 
         if ((pos < src.length) and src.get(pos).isLetter()) {
             var tail = pos
-            while ((tail < src.length) and src.get(tail).isLetterOrDigit()) tail++
+            while ((tail < src.length) and src[tail].isLetterOrDigit()) tail++
             val res = src.slice(pos until tail).uppercase(locale)
             pos = tail + 1
             return res
