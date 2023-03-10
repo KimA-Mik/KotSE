@@ -8,13 +8,14 @@ import org.apache.poi.xwpf.extractor.XWPFWordExtractor
 import org.apache.poi.xwpf.usermodel.XWPFDocument
 import java.io.File
 import java.util.*
+import kotlin.collections.HashMap
 
 
 class Parser() {
 
-    fun ParseDir(dirPath: String) : HashMap<String, HashMap<String, Int>> {
+    fun ParseDir(dirPath: String) : Index {
         ZipSecureFile.setMinInflateRatio(0.0)
-        val map = HashMap<String, HashMap<String, Int>>()
+        val tfIndex = HashMap<String, HashMap<String, Int>>()
         File(dirPath).walk(FileWalkDirection.TOP_DOWN).forEach {
             val ext = it.extension.lowercase(Locale.getDefault())
             var content = String()
@@ -40,10 +41,26 @@ class Parser() {
                         curMap[token] = 1
                     }
                 }
-                map[it.path] = curMap
+                tfIndex[it.path] = curMap
             }
         }
-        return map
+        val idfIndex = computeIdfIndex(tfIndex)
+        return Index(tfIndex, idfIndex)
+    }
+
+    private fun computeIdfIndex(data: HashMap<String, HashMap<String, Int>>): HashMap<String, Int> {
+        val res = HashMap<String, Int>()
+
+        for (doc in data.values){
+            for (term in doc.keys){
+                if (res.containsKey(term)) {
+                    res[term] = res[term]!! + 1
+                }else{
+                    res[term] = 1
+                }
+            }
+        }
+        return res
     }
 
     private fun parsePdf(file: File): String {
