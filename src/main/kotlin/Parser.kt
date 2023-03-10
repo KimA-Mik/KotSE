@@ -1,9 +1,10 @@
-import com.spire.pdf.PdfDocument
-import com.spire.pdf.PdfPageBase
-import kotlinx.serialization.Serializable
+import org.apache.pdfbox.io.RandomAccessFile
+import org.apache.pdfbox.pdfparser.PDFParser
+import org.apache.pdfbox.pdmodel.PDDocument
+import org.apache.pdfbox.text.PDFTextStripper
 import java.io.File
 import java.util.*
-import kotlin.collections.HashMap
+
 
 class Parser() {
 
@@ -37,19 +38,13 @@ class Parser() {
     }
 
     private fun parsePdf(file: File) : String {
-        val doc = PdfDocument()
-        doc.loadFromFile(file.path)
+        val parser = PDFParser(RandomAccessFile(file, "r"))
+        parser.parse()
 
-        val sb = StringBuilder()
-        val page: PdfPageBase
-
-        for(i in 0 until doc.pages.count){
-            sb.append(doc.pages.get(i).extractText(false))
-        }
-        println(doc.pages.count)
-        val res = sb.toString()
-
-        doc.close()
-        return res.slice(74 until res.length)
+        val cosDoc = parser.document
+        val pdfStripper = PDFTextStripper()
+        val pdDoc = PDDocument(cosDoc)
+        val parsedText = pdfStripper.getText(pdDoc)
+        return parsedText
     }
 }

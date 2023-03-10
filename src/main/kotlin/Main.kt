@@ -6,7 +6,7 @@ import java.lang.Exception
 fun main(args: Array<String>) {
     println("Hello World!")
 
-    if (args.size < 1) {
+    if (args.isEmpty()) {
         println("Provide directory path")
     }
     val parser = Parser()
