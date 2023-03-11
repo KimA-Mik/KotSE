@@ -6,10 +6,10 @@ import com.sun.net.httpserver.HttpServer
 import index.Lexer
 import index.Parser
 import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.OutputStream
 import java.net.InetSocketAddress
-import java.util.*
 import kotlin.collections.HashMap
 import kotlin.math.log
 
@@ -25,8 +25,14 @@ class SimpleServer (val index: IndexData, private val port: Int) {
                     }
                     "POST" -> {
                         val query = getQuery(http)
-                        val res = executeQuery(http, query)
-                        println(res)
+                        val res = executeQuery(query)
+                        if (res.isNotEmpty()) {
+                            val jsonResponse = Json.encodeToString(res.take(20))
+                            sendJson(http, jsonResponse)
+                        }else{
+                            send404(http)
+                        }
+                        http.close()
                     }
                 }
             }
@@ -34,26 +40,29 @@ class SimpleServer (val index: IndexData, private val port: Int) {
         }
     }
 
-    private fun executeQuery(http: HttpExchange, query: String): List<ResponseItem> {
-//        for (token in Lexer(query))
-//            println(token)
+    private fun executeQuery(query: String):  List<ResponseItem> {
+        println("[Searching]: $query")
         val resultMap = HashMap<String, Double>()
         val queryList = Lexer(query).asSequence().toList()
-        println(queryList)
         for (document in index.tfIndex.keys){
             var relevancy = 0.0
             for (token in queryList){
                 val tf = computeTf(document, token)
-                val idf = computeIdf(document, token)
+                val idf = computeIdf(token)
                 relevancy += tf * idf
             }
             resultMap[document] = relevancy
         }
 
         val sorted = resultMap.toList()
-            .sortedByDescending { (key, value) -> value }.take(10)
-        println(sorted)
-        return listOf()
+            .sortedByDescending { (key, value) -> value }
+
+        val res = mutableListOf<ResponseItem>()
+        for (item in sorted){
+            if (item.second > 0)
+            res.add(ResponseItem(item.first, item.second))
+        }
+        return res
     }
 
     private fun computeTf(document: String, token: String): Double {
@@ -66,7 +75,7 @@ class SimpleServer (val index: IndexData, private val port: Int) {
         return termCount / totalTerms
     }
 
-    private fun computeIdf(document: String, token: String): Double {
+    private fun computeIdf(token: String): Double {
         val totalDocs = index.tfIndex.size.toDouble()
         val docsCount = if (index.idfIndex.containsKey(token))
             index.idfIndex[token]!!.toDouble() + 1.0
@@ -89,18 +98,23 @@ class SimpleServer (val index: IndexData, private val port: Int) {
 
     private fun sendPlainHtmlFile(http: HttpExchange, file: String) {
         http.responseHeaders.add("Content-type", "text/html")
-        http.sendResponseHeaders(200, 0)
         val os: OutputStream = http.responseBody
         val fileContent = SimpleServer::class.java.getResource(file).readText()
+        http.sendResponseHeaders(200, fileContent.length.toLong())
         os.write(fileContent.encodeToByteArray())
         os.flush()
     }
 
     private fun sendJson(http: HttpExchange, json: String) {
         http.responseHeaders.add("Content-type", "text/json")
-        http.sendResponseHeaders(200, 0)
+        val byteArray = json.encodeToByteArray()
+        http.sendResponseHeaders(200, byteArray.size.toLong())
         val os: OutputStream = http.responseBody
-        os.write(json.encodeToByteArray())
+        os.write(byteArray)
         os.flush()
+    }
+
+    private fun send404(http: HttpExchange){
+        http.sendResponseHeaders(404, 0)
     }
 }

@@ -10,16 +10,16 @@ class Lexer(private val src: String) : Iterator<String>{
 
     private val locale = Locale.getDefault()
     override fun next(): String {
-        while ((pos < src.length) and src[pos].isWhitespace())
+        while ((pos < src.length) && src[pos].isWhitespace())
             pos++
 
         if (pos == src.length)
             return String()
 
-        if ((pos < src.length) and src[pos].isDigit())
+        if ((pos < src.length) && src[pos].isDigit())
             return chopWhile { x -> x.isDigit() }
 
-        if ((pos < src.length) and src[pos].isLetter())
+        if ((pos < src.length) && src[pos].isLetter())
             return chopWhile { x -> x.isLetterOrDigit() }
 
         return chop(1)

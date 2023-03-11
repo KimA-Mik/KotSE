@@ -7,7 +7,7 @@
 </head>
 <body>
     <div>
-        <label for="query">Name (4 to 8 characters):</label>
+        <label for="query">Search query:</label>
 
         <input type="text" id="query" name="query" required>
         <button onclick="onSearchClick()">Search</button>
@@ -17,10 +17,10 @@
     </div>
 </body>
 <script>
-    function onSearchClick(){
+    async function onSearchClick() {
         let query = document.getElementById("query").value
         if (query.length > 0) {
-            fetch(window.location.href, {
+            let response = await fetch(window.location.href, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -28,8 +28,21 @@
                 },
                 body: JSON.stringify({"query": query})
             })
-                .then(response => response.json())
-                .then(response => console.log(JSON.stringify(response)))
+            let resultField = document.getElementById('result')
+            if (response.ok){
+                let json = await response.json()
+                resultField.innerHTML = ""
+                let ind = 1
+                json.forEach(record =>{
+                    if (record.relevancy > 0){
+                        resultField.innerHTML += "<div>" + ind +  ". " + record.file + " (" + record.relevancy + ") </div>"
+                        ind++
+                    }
+                })
+            }
+            else {
+                resultField.innerHTML = "<h1>Something went wrong</h1>"
+            }
         }
     }
 </script>
