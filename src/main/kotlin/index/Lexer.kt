@@ -2,7 +2,7 @@ package index
 
 import java.util.*
 
-class Lexer(val src: String) : Iterator<String>{
+class Lexer(private val src: String) : Iterator<String>{
     private var pos = 0
     override fun hasNext(): Boolean {
         return pos < src.length - 1
@@ -10,32 +10,31 @@ class Lexer(val src: String) : Iterator<String>{
 
     private val locale = Locale.getDefault()
     override fun next(): String {
-
-        while ((pos < src.length - 1) and src[pos].isWhitespace()) {
+        while ((pos < src.length - 1) and src[pos].isWhitespace())
             pos++
-        }
 
-        if ((pos < src.length) and src[pos].isDigit()) {
-            var tail = pos
-            while ((tail < src.length) and src[tail].isDigit()) tail++
-            val res =  src.slice(pos until tail)
-            pos = tail + 1
-            return res
-        }
+        if ((pos < src.length) and src[pos].isDigit())
+            return chop_while { x -> x.isDigit() }
 
-        if ((pos < src.length) and src.get(pos).isLetter()) {
-            var tail = pos
-            while ((tail < src.length) and src[tail].isLetterOrDigit()) tail++
-            val res = src.slice(pos until tail).uppercase(locale)
-            pos = tail + 1
-            return res
-        }
+        if ((pos < src.length) and src[pos].isLetter())
+            return chop_while { x -> x.isLetterOrDigit() }
 
-        if ((pos < src.length) and !src[pos].isWhitespace()) {
-            val res = src[pos].toString()
-            pos++
-            return res
-        }
+        if ((pos < src.length) and !src[pos].isWhitespace())
+            return chop(pos + 1)
+
         return String()
+    }
+
+    private fun chop_while(func: (Char) -> Boolean): String {
+        var tail = pos
+        while ((tail < src.length) and func(src[tail]))
+            tail++
+        return chop(tail)
+    }
+
+    private fun chop(n: Int): String {
+        val res = src.slice(pos until n)
+        pos = n
+        return res.uppercase(locale)
     }
 }
