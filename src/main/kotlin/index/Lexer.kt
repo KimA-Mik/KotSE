@@ -17,15 +17,15 @@ class Lexer(private val src: String) : Iterator<String>{
             return String()
 
         if ((pos < src.length) and src[pos].isDigit())
-            return chop_while { x -> x.isDigit() }
+            return chopWhile { x -> x.isDigit() }
 
         if ((pos < src.length) and src[pos].isLetter())
-            return chop_while { x -> x.isLetterOrDigit() }
+            return chopWhile { x -> x.isLetterOrDigit() }
 
         return chop(1)
     }
 
-    private fun chop_while(func: (Char) -> Boolean): String {
+    private fun chopWhile(func: (Char) -> Boolean): String {
         var tail = pos
         while ((tail < src.length) && func(src[tail]))
             tail++
