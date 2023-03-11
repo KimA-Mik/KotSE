@@ -14,10 +14,10 @@ class Lexer(private val src: String) : Iterator<String>{
             pos++
 
         if ((pos < src.length) and src[pos].isDigit())
-            return chop_while { x -> x.isDigit() }
+            return chopWhile { x -> x.isDigit() }
 
         if ((pos < src.length) and src[pos].isLetter())
-            return chop_while { x -> x.isLetterOrDigit() }
+            return chopWhile { x -> x.isLetterOrDigit() }
 
         if ((pos < src.length) and !src[pos].isWhitespace())
             return chop(pos + 1)
@@ -25,7 +25,7 @@ class Lexer(private val src: String) : Iterator<String>{
         return String()
     }
 
-    private fun chop_while(func: (Char) -> Boolean): String {
+    private fun chopWhile(func: (Char) -> Boolean): String {
         var tail = pos
         while ((tail < src.length) and func(src[tail]))
             tail++
