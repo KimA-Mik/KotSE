@@ -1,3 +1,4 @@
+import index.IndexData
 import index.Parser
 import server.SimpleServer
 import kotlinx.serialization.decodeFromString

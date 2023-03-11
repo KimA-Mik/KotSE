@@ -1,6 +1,5 @@
 package index
 
-import IndexData
 import org.apache.pdfbox.io.RandomAccessFile
 import org.apache.pdfbox.pdfparser.PDFParser
 import org.apache.pdfbox.pdmodel.PDDocument
@@ -15,6 +14,10 @@ import kotlin.collections.HashMap
 
 
 class Parser() {
+
+    companion object{
+        const val TOTAL_TERMS_KEY = "total"
+    }
 
     fun ParseDir(dirPath: String) : IndexData {
         ZipSecureFile.setMinInflateRatio(0.0)
@@ -37,14 +40,19 @@ class Parser() {
             if (content.isNotEmpty()) {
                 val curMap = HashMap<String, Int>()
                 val lexer = Lexer(content)
+                var totalTerms = 0
                 for (token in lexer) {
+                    totalTerms += 1
                     if (curMap.containsKey(token)) {
                         curMap[token] = curMap[token]!! + 1
                     } else {
                         curMap[token] = 1
                     }
                 }
-                tfIndex[it.path] = curMap
+                if (totalTerms > 0) {
+                    curMap[TOTAL_TERMS_KEY] = totalTerms
+                    tfIndex[it.path] = curMap
+                }
             }
         }
         val idfIndex = computeIdfIndex(tfIndex)

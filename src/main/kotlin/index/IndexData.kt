@@ -1,3 +1,5 @@
+package index
+
 import kotlinx.serialization.Serializable
 import kotlin.collections.HashMap
 
