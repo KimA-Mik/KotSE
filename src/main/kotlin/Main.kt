@@ -5,7 +5,8 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
-import java.lang.Exception
+import kotlin.Exception
+import kotlin.system.measureTimeMillis
 
 fun main(args: Array<String>) {
     if (args.isEmpty()) {
@@ -49,8 +50,16 @@ private fun index(dir: String, cacheFile: String) {
 
 private fun serve(file: String){
     lateinit var indexData: IndexData
-    File(file).bufferedReader().use {it ->
-        indexData = Json.decodeFromString(it.readText())
+    try {
+        val mills = measureTimeMillis {
+            File(file).bufferedReader().use { it ->
+                indexData = Json.decodeFromString(it.readText())
+            }
+        }
+        println("Data loaded in ${mills}ms")
+    }catch (e: Exception){
+        println(e.localizedMessage)
+        return
     }
 
     val server = SimpleServer(indexData, 6969)
